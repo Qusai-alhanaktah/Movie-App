@@ -15,7 +15,7 @@ class Home extends Component {
         this.state = {
             loading: true,
             movies: [],
-            selectedType: 'upcoming',
+            selectedType: 'now_playing',
         }
     }
 
@@ -25,7 +25,8 @@ class Home extends Component {
 
     async fetchData() {
         this.setState({ loading: true, })
-        let response = await fetch(`https://api.themoviedb.org/3/movie/${this.state.selectedType}?api_key=4f298a53e552283bee957836a529baec`);
+        let type = this.state.selectedType ? this.state.selectedType : 'now_playing';
+        let response = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=4f298a53e552283bee957836a529baec`);
         let data = await response.json();
         let movies = data.results.map(item => {
             return {
@@ -80,19 +81,19 @@ class Home extends Component {
                             style={{ padding: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'upcoming' ? '' : 'upcoming' }, () => this.fetchData())}
                         >
-                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: selectedType == 'upcoming' ? 'white' : 'black', backgroundColor: selectedType == 'upcoming' ? '#1dbeca' : '', }}>Upcoming</Text>
+                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'upcoming' ? '#1dbeca' : 'black', }}>Upcoming</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ padding: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'popular' ? '' : 'popular' }, () => this.fetchData())}
                         >
-                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: selectedType == 'popular' ? 'white' : 'black', backgroundColor: selectedType == 'popular' ? '#1dbeca' : '', }}>Popular</Text>
+                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'popular' ? '#1dbeca' : 'black', }}>Popular</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ padding: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'top_rated' ? '' : 'top_rated' }, () => this.fetchData())}
                         >
-                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: selectedType == 'top_rated' ? 'white' : 'black', backgroundColor: selectedType == 'top_rated' ? '#1dbeca' : '', }}>Top rated</Text>
+                            <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'top_rated' ? '#1dbeca' : 'black', }}>Top Rated</Text>
                         </TouchableOpacity>
                     </View>
                 )}

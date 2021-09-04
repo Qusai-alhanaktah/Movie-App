@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import {
     Image,
     SafeAreaView,
@@ -11,7 +11,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 const Header = () => {
     const [open, setOpen] = useState(false);
-
     const items = [
         { label: '+', value: '+' },
         { label: 'En', value: 'en' },
@@ -37,10 +36,9 @@ const Header = () => {
                     open={open}
                     items={items}
                     setOpen={setOpen}
-                    zIndex={9999999999999}
-                    zIndexInverse={1000}
                     theme={"DARK"}
                     placeholder={""}
+                    listMode={'MODAL'}
                     dropDownContainerStyle={{
                         backgroundColor: 'black',
                         alignSelf: 'flex-end',
@@ -76,6 +74,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginHorizontal: 5,
+        zIndex: 99999999999999999999999999,
     }
 });
 
