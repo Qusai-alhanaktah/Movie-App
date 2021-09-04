@@ -6,14 +6,13 @@ import {
   View,
 } from 'react-native';
 import Header from './src/header';
+import Home from './src/home';
 
 const App = () => {
   return (
     <View style={styles.container}>
       <Header />
-      <View>
-        <Text>Hello world!</Text>
-      </View>
+      <Home />
     </View>
   );
 };

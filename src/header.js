@@ -11,14 +11,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 const Header = () => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
+
+    const items = [
         { label: '+', value: '+' },
         { label: 'En', value: 'en' },
         { label: 'Login', value: 'login' },
         { label: 'Join TMDB', value: 'join_TMDB' },
         { label: 'Search', value: 'search' }
-    ]);
+    ];
 
     return (
         <View style={styles.container}>
@@ -35,11 +35,10 @@ const Header = () => {
             <View style={styles.parts}>
                 <DropDownPicker
                     open={open}
-                    value={value}
                     items={items}
                     setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
+                    zIndex={9999999999999}
+                    zIndexInverse={1000}
                     theme={"DARK"}
                     placeholder={""}
                     dropDownContainerStyle={{
