@@ -3,6 +3,7 @@ import {
     ActivityIndicator,
     FlatList,
     Image,
+    ScrollView,
     Text,
     View,
 } from 'react-native'
@@ -30,12 +31,32 @@ class Show extends Component {
                     .then(response => response.json())
                     .then(data => {
                         movie.credits = data.cast
+                        this.setState({ movie, });
+                    })
+                    .catch(e => console.error(e));
+                fetch(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=4f298a53e552283bee957836a529baec`)
+                    .then(response => response.json())
+                    .then(data => {
+                        movie.reviews = data.results;
+                        movie.reviews.forEach(review => review.showMore = false);
                         this.setState({ movie, }, () => this.setState({ loading: false, }));
                     })
                     .catch(e => console.error(e));
             })
             .catch(e => console.error(e));
 
+    }
+    getUrl(item) {
+        let uri = item.author_details?.avatar_path?.includes('http')
+            ?
+            item.author_details.avatar_path
+            : item.author_details?.avatar_path
+                ?
+                `https://image.tmdb.org/t/p/w500/${item.author_details.avatar_path}`
+                :
+                'https://sothis.es/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png';
+        uri = uri[0] == '/' ? uri.substring(1, uri.length - 1) : uri;
+        return uri;
     }
     render() {
         let {
@@ -55,7 +76,7 @@ class Show extends Component {
             )
         }
         return (
-            <View>
+            <ScrollView>
                 <View style={{ backgroundColor: 'black', }}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                         <Image
@@ -99,21 +120,25 @@ class Show extends Component {
                         </View>
                     </View>
                 </View>
+                <View style={{ paddingVertical: 10, marginLeft: 10, }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 17, }}>Movie Cast</Text>
+                </View>
                 <FlatList
                     data={movie.credits}
                     keyExtractor={(item, index) => index.toString()}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
-                        paddingVertical: 20,
+                        paddingVertical: 5,
                     }}
                     renderItem={({ item, index }) => (
                         <View
                             style={{
                                 marginHorizontal: 10,
-                                borderWidth: 1,
                                 borderRadius: 5,
                                 padding: 5,
+                                elevation: 5,
+                                backgroundColor: 'white',
                             }}
                         >
                             <Image
@@ -126,7 +151,7 @@ class Show extends Component {
                                     marginVertical: 5,
                                 }}
                             />
-                            <View style={{ width: '100%', }}>
+                            <View>
                                 <Text style={{ fontWeight: 'bold', }}>{item.name}</Text>
                                 <Text style={{ paddingVertical: 5, }}>{item.character}</Text>
                             </View>
@@ -134,7 +159,85 @@ class Show extends Component {
                         </View>
                     )}
                 />
-            </View>
+                <View style={{ paddingTop: 10, marginLeft: 10, }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 17, }}>Reviews</Text>
+                </View>
+                <FlatList
+                    data={movie.reviews}
+                    keyExtractor={(item, index) => index.toString()}
+                    contentContainerStyle={{
+                        paddingBottom: 20,
+                    }}
+                    renderItem={({ item, index }) => (
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                backgroundColor: 'white',
+                                elevation: 5,
+                                margin: 10,
+                                padding: 5,
+                                borderRadius: 5,
+                            }}
+                        >
+                            <View style={{
+                                width: '25%',
+                                marginHorizontal: 5,
+                            }}>
+                                <Image
+                                    source={{ uri: this.getUrl(item) }}
+                                    style={{
+                                        width: 75,
+                                        height: 75,
+                                        borderRadius: 5,
+                                    }}
+                                />
+                            </View>
+                            <View style={{ width: '70%', }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 11, }}>{item.author}</Text>
+                                <Text style={{ fontWeight: 'bold', paddingVertical: 5, fontSize: 9, }}>Rate: {item.author_details.rating}</Text>
+                                {
+                                    item.content.length > 100
+                                        ?
+                                        (
+                                            <View>
+                                                <Text style={{ fontSize: 8, }}>{item.content.substring(0, 100)}</Text>
+                                                {
+                                                    !item.showMore
+                                                        ?
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                movie.reviews[index].showMore = true;
+                                                                this.setState({ movie, })
+                                                            }}
+                                                        >
+                                                            <Text style={{ padding: 5, fontSize: 9, fontWeight: 'bold', }}>Show more {'>>>'}</Text>
+                                                        </TouchableOpacity>
+                                                        :
+                                                        <>
+                                                            <Text style={{ fontSize: 8, }}>{item.content.substring(100, item.content.length - 1)}</Text>
+                                                            <TouchableOpacity
+                                                                onPress={() => {
+                                                                    movie.reviews[index].showMore = false;
+                                                                    this.setState({ movie, })
+                                                                }}
+                                                            >
+                                                                <Text style={{ padding: 5, fontSize: 9, fontWeight: 'bold', }}>{'<<<'} Show less</Text>
+                                                            </TouchableOpacity>
+                                                        </>
+
+                                                }
+                                            </View>
+                                        )
+                                        :
+                                        (
+                                            <Text style={{ fontSize: 8, }}>{item.content}</Text>
+                                        )
+                                }
+                            </View>
+                        </View>
+                    )}
+                />
+            </ScrollView>
         )
     }
 }

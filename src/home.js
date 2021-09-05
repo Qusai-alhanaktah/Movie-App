@@ -70,32 +70,30 @@ class Home extends Component {
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{
                     paddingBottom: 50,
-                    paddingTop: 10,
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}
                 ListHeaderComponent={() => (
                     <View style={{
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
+                        justifyContent: 'space-around',
                         alignItems: 'center',
-                        marginHorizontal: 30,
-                        marginBottom: 5,
+                        marginVertical: 10,
                     }}>
                         <TouchableOpacity
-                            style={{ padding: 5, }}
+                            style={{ paddingHorizontal: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'upcoming' ? '' : 'upcoming' }, () => this.fetchData())}
                         >
                             <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'upcoming' ? '#1dbeca' : 'black', }}>Upcoming</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ padding: 5, }}
+                            style={{ paddingHorizontal: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'popular' ? '' : 'popular' }, () => this.fetchData())}
                         >
                             <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'popular' ? '#1dbeca' : 'black', }}>Popular</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ padding: 5, }}
+                            style={{ paddingHorizontal: 5, }}
                             onPress={() => this.setState({ selectedType: selectedType == 'top_rated' ? '' : 'top_rated' }, () => this.fetchData())}
                         >
                             <Text style={{ fontSize: 14, padding: 10, borderRadius: 3, fontWeight: 'bold', color: 'white', backgroundColor: selectedType == 'top_rated' ? '#1dbeca' : 'black', }}>Top Rated</Text>
@@ -108,21 +106,25 @@ class Home extends Component {
                 renderItem={({ item, index }) => (
                     <TouchableOpacity
                         style={{
-                            width: '50%',
+                            width: '48%',
                             alignItems: 'center',
+                            elevation: 5,
+                            borderRadius: 5,
+                            backgroundColor: 'white',
+                            margin: 3,
                         }}
                         onPress={() => this.props.navigation.navigate('Show', { id: item.id })}
                     >
                         <Image
                             source={{ uri: item.image }}
                             style={{
-                                width: 170,
+                                width: 150,
                                 height: 200,
                                 borderRadius: 10,
-                                marginVertical: 5,
+                                marginTop: 10,
                             }}
                         />
-                        <View style={{ width: '100%', paddingHorizontal: 10, }}>
+                        <View style={{ width: '100%', padding: 10, }}>
                             <Text style={{ fontWeight: 'bold', }}>{item.avgVote}</Text>
                             <Text style={{ fontSize: 10, paddingVertical: 5, }}>{item.title}</Text>
                             <Text style={{ fontWeight: 'bold', fontSize: 10, color: 'gray' }}>{item.date}</Text>
