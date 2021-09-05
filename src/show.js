@@ -40,7 +40,9 @@ class Show extends Component {
                     .then(data => {
                         movie.reviews = data.results;
                         movie.reviews.forEach(review => review.showMore = false);
-                        this.setState({ movie, }, () => this.setState({ loading: false, }));
+                        this.setState({ movie, }, () => setTimeout(() => {
+                            this.setState({ loading: false, })
+                        }, 1000));
                     })
                     .catch(e => console.error(e));
             })

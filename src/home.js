@@ -7,7 +7,41 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
-import { API_URL, API_KEY } from '../env.json';
+import { API_URL, API_KEY, GENRES } from '../env.json';
+import RNSpeedometer from 'react-native-speedometer';
+
+const labels = [
+    {
+        name: '',
+        labelColor: '#ff2900',
+        activeBarColor: '#ff2900',
+    },
+    {
+        name: '',
+        labelColor: '#ff5400',
+        activeBarColor: '#ff5400',
+    },
+    {
+        name: '',
+        labelColor: '#f4ab44',
+        activeBarColor: '#f4ab44',
+    },
+    {
+        name: '',
+        labelColor: '#f2cf1f',
+        activeBarColor: '#f2cf1f',
+    },
+    {
+        name: '',
+        labelColor: '#14eb6e',
+        activeBarColor: '#14eb6e',
+    },
+    {
+        name: '',
+        labelColor: '#00ff6b',
+        activeBarColor: '#00ff6b',
+    },
+]
 
 class Home extends Component {
     constructor(props) {
@@ -22,7 +56,7 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        this.fetchData()
+        this.fetchData();
     }
     handleRefresh = () => {
         this.setState({
@@ -38,13 +72,15 @@ class Home extends Component {
             let response = await fetch(`${API_URL}/movie/${type}?api_key=${API_KEY}`);
             let data = await response.json();
             let movies = data.results.map(item => {
+                let genres = []
+                GENRES.forEach(genre => item.genre_ids.includes(genre.id) ? genres.push(genre.name) : '');
                 return {
                     id: item.id,
                     title: item.title,
                     image: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
                     date: item.release_date,
                     avgVote: item.vote_average,
-                    genres: ''
+                    genres: genres ? genres[0] : ''
                 }
             })
             this.setState({ movies, }, () => this.setState({ loading: false, }));
@@ -123,6 +159,7 @@ class Home extends Component {
                             borderRadius: 5,
                             backgroundColor: 'white',
                             margin: 3,
+                            paddingVertical: 5,
                         }}
                         onPress={() => this.props.navigation.navigate('Show', { id: item.id })}
                     >
@@ -133,12 +170,40 @@ class Home extends Component {
                                 height: 200,
                                 borderRadius: 10,
                                 marginTop: 10,
+                                marginBottom: 5,
                             }}
                         />
-                        <View style={{ width: '100%', padding: 10, }}>
-                            <Text style={{ fontWeight: 'bold', }}>{item.avgVote}</Text>
-                            <Text style={{ fontSize: 10, paddingVertical: 5, }}>{item.title}</Text>
-                            <Text style={{ fontWeight: 'bold', fontSize: 10, color: 'gray' }}>{item.date}</Text>
+                        <View style={{ width: '100%', paddingHorizontal: 5, flexDirection: 'row', }}>
+                            <Text style={{ fontSize: 10, fontWeight: 'bold' }}>{item.title}</Text>
+                        </View>
+                        <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-end',
+                            paddingBottom: 5,
+                        }}>
+                            <View style={{ marginLeft: 5, alignSelf: 'flex-end', }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 10, color: 'gray', }}>{item.genres}</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 10, color: 'gray', }}>{item.date}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    paddingRight: 5,
+                                    paddingBottom: 5,
+                                }}
+                            >
+                                <RNSpeedometer
+                                    maxValue={10}
+                                    value={item.avgVote}
+                                    allowedDecimals={1}
+                                    size={30}
+                                    labels={labels}
+                                    labelStyle={{
+                                        fontSize: 7,
+                                    }}
+                                />
+                            </View>
                         </View>
                     </TouchableOpacity>
                 )}
