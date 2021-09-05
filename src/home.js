@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
+import { API_URL, API_KEY } from '../env.json';
 
 class Home extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class Home extends Component {
 
         this.state = {
             loading: true,
+            refreshing: false,
             movies: [],
             selectedType: 'now_playing',
         }
@@ -22,12 +24,18 @@ class Home extends Component {
     async componentDidMount() {
         this.fetchData()
     }
-
-    async fetchData() {
+    handleRefresh = () => {
+        this.setState({
+            selectedType: 'now_playing',
+        }, () => {
+            this.fetchData();
+        })
+    }
+    fetchData = async () => {
         try {
             this.setState({ loading: true, })
             let type = this.state.selectedType ? this.state.selectedType : 'now_playing';
-            let response = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=4f298a53e552283bee957836a529baec`);
+            let response = await fetch(`${API_URL}/movie/${type}?api_key=${API_KEY}`);
             let data = await response.json();
             let movies = data.results.map(item => {
                 return {
@@ -50,6 +58,7 @@ class Home extends Component {
             loading,
             movies,
             selectedType,
+            refreshing,
         } = this.state;
         if (loading) {
             return (
@@ -68,6 +77,8 @@ class Home extends Component {
                 data={movies}
                 numColumns={2}
                 keyExtractor={(item, index) => index.toString()}
+                refreshing={refreshing}
+                onRefresh={this.handleRefresh}
                 contentContainerStyle={{
                     paddingBottom: 50,
                     alignItems: 'center',

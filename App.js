@@ -12,7 +12,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Header from './src/header.js';
 import Home from './src/home.js';
 import Show from './src/show.js';
-
 const Stack = createStackNavigator();
 
 function MyStack() {
