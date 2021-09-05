@@ -5,15 +5,31 @@ import {
   Text,
   View,
 } from 'react-native';
-import Header from './src/header';
-import Home from './src/home';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Header from './src/header.js';
+import Home from './src/home.js';
+import Show from './src/show.js';
+
+const Stack = createStackNavigator();
+
+function MyStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Show" component={Show} />
+    </Stack.Navigator>
+  );
+}
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <NavigationContainer style={styles.container}>
       <Header />
-      <Home />
-    </View>
+      <MyStack />
+    </NavigationContainer>
   );
 };
 

@@ -24,20 +24,25 @@ class Home extends Component {
     }
 
     async fetchData() {
-        this.setState({ loading: true, })
-        let type = this.state.selectedType ? this.state.selectedType : 'now_playing';
-        let response = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=4f298a53e552283bee957836a529baec`);
-        let data = await response.json();
-        let movies = data.results.map(item => {
-            return {
-                title: item.title,
-                image: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
-                date: item.release_date,
-                avgVote: item.vote_average,
-                genres: ''
-            }
-        })
-        this.setState({ movies, }, () => this.setState({ loading: false, }));
+        try {
+            this.setState({ loading: true, })
+            let type = this.state.selectedType ? this.state.selectedType : 'now_playing';
+            let response = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=4f298a53e552283bee957836a529baec`);
+            let data = await response.json();
+            let movies = data.results.map(item => {
+                return {
+                    id: item.id,
+                    title: item.title,
+                    image: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+                    date: item.release_date,
+                    avgVote: item.vote_average,
+                    genres: ''
+                }
+            })
+            this.setState({ movies, }, () => this.setState({ loading: false, }));
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     render() {
@@ -106,6 +111,7 @@ class Home extends Component {
                             width: '50%',
                             alignItems: 'center',
                         }}
+                        onPress={() => this.props.navigation.navigate('Show', { id: item.id })}
                     >
                         <Image
                             source={{ uri: item.image }}
