@@ -39,11 +39,6 @@ const Header = () => {
                     theme={"DARK"}
                     placeholder={""}
                     listMode={'MODAL'}
-                    dropDownContainerStyle={{
-                        backgroundColor: 'black',
-                        alignSelf: 'flex-end',
-                        width: 100,
-                    }}
                     containerStyle={{
                         width: 50,
                     }}
@@ -61,7 +56,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: 'black',
-        paddingVertical: 10,
     },
     text: {
         fontSize: 10,

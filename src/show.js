@@ -6,6 +6,8 @@ import {
     Text,
     View,
 } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import backIcon from '../assets/back.png'
 
 class Show extends Component {
     constructor(props) {
@@ -54,35 +56,46 @@ class Show extends Component {
         }
         return (
             <View>
-                <View>
-                    <View style={{
-                        paddingVertical: 10,
-                        backgroundColor: 'black',
-                        flexDirection: 'row',
-                    }}>
+                <View style={{ backgroundColor: 'black', }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                        <Image
+                            source={backIcon}
+                            style={{
+                                width: 25,
+                                height: 25,
+                                marginLeft: 10,
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <View>
                         <View style={{
-                            width: '46%',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            paddingVertical: 10,
+                            flexDirection: 'row',
                         }}>
-                            <Image
-                                source={{ uri: movie.image, }}
-                                style={{
-                                    width: 150,
-                                    height: 250,
-                                    borderRadius: 7,
-                                }}
-                            />
-                        </View>
-                        <View style={{ width: '4%', }}></View>
-                        <View style={{
-                            width: '50%',
-                        }}>
-                            <Text style={{ color: 'white', fontSize: 16, marginVertical: 3, }}>{movie.title}</Text>
-                            <Text style={{ color: 'white', fontSize: 10, marginVertical: 3, }}>{movie.genres ? movie.genres[0].name : 'Non-type'} {'.'} {movie.runtime}m</Text>
-                            <Text style={{ color: 'gray', fontSize: 10, marginVertical: 3, fontStyle: 'italic', }}>{movie.tagline}</Text>
-                            <Text style={{ color: 'white', fontSize: 13, marginVertical: 3, }}>Overview</Text>
-                            <Text style={{ color: 'white', fontSize: 9, marginVertical: 3, }}>{movie.overview}</Text>
+                            <View style={{
+                                width: '46%',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <Image
+                                    source={{ uri: movie.image, }}
+                                    style={{
+                                        width: 150,
+                                        height: 250,
+                                        borderRadius: 7,
+                                    }}
+                                />
+                            </View>
+                            <View style={{ width: '4%', }}></View>
+                            <View style={{
+                                width: '50%',
+                            }}>
+                                <Text style={{ color: 'white', fontSize: 16, marginVertical: 3, fontWeight: 'bold', }}>{movie.title}</Text>
+                                <Text style={{ color: 'white', fontSize: 10, marginVertical: 3, }}>{movie.genres ? movie.genres[0].name : 'Non-type'} {'.'} {movie.runtime}m</Text>
+                                <Text style={{ color: 'gray', fontSize: 10, marginVertical: 3, fontStyle: 'italic', }}>{movie.tagline}</Text>
+                                <Text style={{ color: 'white', fontSize: 12, marginVertical: 3, }}>Overview</Text>
+                                <Text style={{ color: 'white', fontSize: 8, marginVertical: 3, }}>{movie.overview}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
